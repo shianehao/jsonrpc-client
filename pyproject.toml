@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "jsonrpc-client"
+version = "0.0.1"
+dependencies = [
+	"PySide6",
+	"PySide6_Addons",
+	"PySide6_Essentials",
+]
