@@ -17,14 +17,13 @@ __status__ = "Package"
 
 def main():
     opts = argparse.ArgumentParser()
-    opts.add_argument('serverip', help="server IP")
-    opts.add_argument('port', help="Server service port")
+    opts.add_argument('serverip', help="server IP", type=str)
+    opts.add_argument('port', help="Server service port", type=int)
     args = opts.parse_args()
 
     app = QApplication([])
-    window = MainWindow()
+    window = MainWindow(args.serverip, args.port)
     app.exec()
-
 
 
 if __name__ == "__main__":

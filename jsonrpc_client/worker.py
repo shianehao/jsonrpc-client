@@ -49,13 +49,11 @@ class Worker(QRunnable):
         self.args = args
         self.kwargs = kwargs
         self.signals = WorkerSignals()
-        # Add the callback to our kwargs
-        self.kwargs["progress_callback"] = self.signals.progress
 
     @Slot()
     def run(self):
         try:
-            result = self.fn(*self.args, **self.kwargs)
+            result = self.fn(self.signals.progress.emit, *self.args, **self.kwargs)
         except Exception:
             traceback.print_exc()
             exctype, value = sys.exc_info()[:2]

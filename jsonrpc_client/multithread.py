@@ -1,7 +1,5 @@
 import time
 
-from jsonrpc_client.worker import Worker
-
 from PySide6.QtCore import (
     QThreadPool,
     QTimer,
@@ -14,9 +12,21 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from jsonrpc_client.worker import Worker
+from jsonrpc_client.ipc import TcpIpc
+
+
+__author__ = "Roger Huang"
+__copyright__ = "Copyright 2024, The JSONRPC Client Project"
+__license__ = "Proprietary"
+__version__ = "2.0.1"
+__maintainer__ = "Roger Huang"
+__email__ = "rogerhuang7@gmail.com"
+__status__ = "Package"
+
 
 class MainWindow(QMainWindow):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, server_ip: str, port: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.counter = 0
 
@@ -44,15 +54,10 @@ class MainWindow(QMainWindow):
         self.timer.timeout.connect(self.recurring_timer)
         self.timer.start()
 
-    def progress_fn(self, n):
-        print(f"{n:.1f}% done")
+        self.worker = TcpIpc(server_ip=server_ip, port=port)
 
-    def execute_this_fn(self, progress_callback):
-        for n in range(0, 5):
-            time.sleep(1)
-            progress_callback.emit(n * 100 / 4)
-
-        return "Done."
+    def progress_fn(self, msg:bytes):
+        print(msg.decode())
 
     def print_output(self, s):
         print(s)
@@ -63,7 +68,7 @@ class MainWindow(QMainWindow):
     def oh_no(self):
         # Pass the function to execute
         worker = Worker(
-            self.execute_this_fn
+            self.worker.run
         )  # Any other args, kwargs are passed to the run function
         worker.signals.result.connect(self.print_output)
         worker.signals.finished.connect(self.thread_complete)
@@ -74,3 +79,9 @@ class MainWindow(QMainWindow):
     def recurring_timer(self):
         self.counter += 1
         self.label.setText(f"Counter: {self.counter}")
+
+    def closeEvent(self, event):
+        self.worker.close()
+        self.threadpool.waitForDone()
+
+        return super().closeEvent(event)
