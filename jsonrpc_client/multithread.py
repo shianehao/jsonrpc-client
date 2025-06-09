@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
 from jsonrpc_client.worker import Worker
 from jsonrpc_client.ipc import TcpIpc
 
+from jsonrpc_client.dlg.main_window import Ui_MainWindow
 
 __author__ = "Roger Huang"
 __copyright__ = "Copyright 2024, The JSONRPC Client Project"
@@ -30,34 +31,18 @@ class MainWindow(QMainWindow):
         super().__init__(*args, **kwargs)
         self.counter = 0
 
-        layout = QVBoxLayout()
-
-        self.label = QLabel("Start")
-        button = QPushButton("DANGER!")
-        button.pressed.connect(self.oh_no)
-
-        layout.addWidget(self.label)
-        layout.addWidget(button)
-
-        w = QWidget()
-        w.setLayout(layout)
-        self.setCentralWidget(w)
-
-        self.show()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
 
         self.threadpool = QThreadPool()
         thread_count = self.threadpool.maxThreadCount()
         print(f"Multithreading with maximum {thread_count} threads")
 
-        self.timer = QTimer()
-        self.timer.setInterval(1000)
-        self.timer.timeout.connect(self.recurring_timer)
-        self.timer.start()
-
         self.worker = TcpIpc(server_ip=server_ip, port=port)
+        self.oh_no()
 
     def progress_fn(self, msg:bytes):
-        print(msg.decode())
+        self.ui.eventView.appendPlainText(msg.decode())
 
     def print_output(self, s):
         print(s)

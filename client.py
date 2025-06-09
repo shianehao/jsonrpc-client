@@ -23,6 +23,7 @@ def main():
 
     app = QApplication([])
     window = MainWindow(args.serverip, args.port)
+    window.show()
     app.exec()
 
 
