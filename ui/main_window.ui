@@ -6,15 +6,73 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>708</width>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>JSONRPC Client</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="QIcon::ThemeIcon::DocumentSend"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Register name : </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit"/>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBox">
+        <item>
+         <property name="text">
+          <string>BIT</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>UINT</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>INT</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>STR</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Value : </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_2"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Fire</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
@@ -35,13 +93,33 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
+     <width>708</width>
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuF_ile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionCl_ose"/>
+   </widget>
+   <addaction name="menuF_ile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionCl_ose">
+   <property name="text">
+    <string>Cl&amp;ose</string>
+   </property>
+  </action>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>controlView</tabstop>
+  <tabstop>eventView</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
