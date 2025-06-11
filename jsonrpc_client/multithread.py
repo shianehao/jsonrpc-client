@@ -1,3 +1,5 @@
+import json
+
 from PySide6.QtCore import (
     QThreadPool,
 )
@@ -29,6 +31,7 @@ class MainWindow(QMainWindow):
 
         self.ui.lineEdit_registerName.textChanged.connect(self.enable_fire)
         self.ui.lineEdit_value.textChanged.connect(self.enable_fire)
+        self.ui.pushButton_fire.clicked.connect(self.wade)
 
         self.threadpool = QThreadPool()
         thread_count = self.threadpool.maxThreadCount()
@@ -49,6 +52,24 @@ class MainWindow(QMainWindow):
         val = self.ui.lineEdit_value.text()
         self.ui.pushButton_fire.setEnabled(
             True if reg and val else False)
+        
+    def wade(self):
+        reg = self.ui.lineEdit_registerName.text()
+        val = self.ui.lineEdit_value.text()
+        sel = self.ui.comboBox_type.currentText()
+        type = {
+            "BIT":"BIT",
+            "UINT":"WORD",
+            "INT":"WORD",
+            "STR":"STR"
+            }.get(sel)
+        
+        if type != "STR":
+            val = int(val)
+
+        payload = {"type":"WRITE", type:{reg:val}}
+
+        self.worker.write(json.dumps(payload))
 
     def progress_fn(self, msg:bytes):
         self.ui.plainText_eventView.appendPlainText(msg.decode())
