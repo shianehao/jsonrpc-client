@@ -23,15 +23,22 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Register name : </string>
+         <string>Register</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="lineEdit_registerName"/>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Type</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBox_type">
         <item>
          <property name="text">
           <string>BIT</string>
@@ -57,15 +64,18 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Value : </string>
+         <string>Value</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_2"/>
+       <widget class="QLineEdit" name="lineEdit_value"/>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="pushButton_fire">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Fire</string>
         </property>
@@ -78,8 +88,8 @@
       <property name="orientation">
        <enum>Qt::Orientation::Vertical</enum>
       </property>
-      <widget class="QListView" name="controlView"/>
-      <widget class="QPlainTextEdit" name="eventView">
+      <widget class="QListView" name="listView_controlView"/>
+      <widget class="QPlainTextEdit" name="plainText_eventView">
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -113,12 +123,12 @@
   </action>
  </widget>
  <tabstops>
-  <tabstop>lineEdit</tabstop>
-  <tabstop>comboBox</tabstop>
-  <tabstop>lineEdit_2</tabstop>
-  <tabstop>pushButton</tabstop>
-  <tabstop>controlView</tabstop>
-  <tabstop>eventView</tabstop>
+  <tabstop>lineEdit_registerName</tabstop>
+  <tabstop>comboBox_type</tabstop>
+  <tabstop>lineEdit_value</tabstop>
+  <tabstop>pushButton_fire</tabstop>
+  <tabstop>listView_controlView</tabstop>
+  <tabstop>plainText_eventView</tabstop>
  </tabstops>
  <resources/>
  <connections/>

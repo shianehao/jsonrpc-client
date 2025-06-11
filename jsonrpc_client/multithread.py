@@ -1,15 +1,8 @@
-import time
-
 from PySide6.QtCore import (
     QThreadPool,
-    QTimer,
 )
 from PySide6.QtWidgets import (
-    QLabel,
     QMainWindow,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
 )
 
 from jsonrpc_client.worker import Worker
@@ -34,24 +27,14 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self.ui.lineEdit_registerName.textChanged.connect(self.enable_fire)
+        self.ui.lineEdit_value.textChanged.connect(self.enable_fire)
+
         self.threadpool = QThreadPool()
         thread_count = self.threadpool.maxThreadCount()
         print(f"Multithreading with maximum {thread_count} threads")
 
         self.worker = TcpIpc(server_ip=server_ip, port=port)
-        self.oh_no()
-
-    def progress_fn(self, msg:bytes):
-        self.ui.eventView.appendPlainText(msg.decode())
-
-    def print_output(self, s):
-        print(s)
-
-    def thread_complete(self):
-        print("THREAD COMPLETE!")
-
-    def oh_no(self):
-        # Pass the function to execute
         worker = Worker(
             self.worker.run
         )  # Any other args, kwargs are passed to the run function
@@ -60,6 +43,21 @@ class MainWindow(QMainWindow):
         worker.signals.progress.connect(self.progress_fn)
         # Execute
         self.threadpool.start(worker)
+
+    def enable_fire(self):
+        reg = self.ui.lineEdit_registerName.text()
+        val = self.ui.lineEdit_value.text()
+        self.ui.pushButton_fire.setEnabled(
+            True if reg and val else False)
+
+    def progress_fn(self, msg:bytes):
+        self.ui.plainText_eventView.appendPlainText(msg.decode())
+
+    def print_output(self, s):
+        print(s)
+
+    def thread_complete(self):
+        print("THREAD COMPLETE!")
 
     def recurring_timer(self):
         self.counter += 1
