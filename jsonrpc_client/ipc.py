@@ -34,6 +34,7 @@ class TcpIpc:
         return "Done."
     
     def close(self) -> None:
+        self.socket.shutdown(0)
         self.stop = True
 
     def write(self, payload: str) -> None:
