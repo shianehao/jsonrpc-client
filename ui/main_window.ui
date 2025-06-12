@@ -21,6 +21,20 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
+       <widget class="QComboBox" name="comboBox_directive">
+        <item>
+         <property name="text">
+          <string>WRITE</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>READ</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Register</string>

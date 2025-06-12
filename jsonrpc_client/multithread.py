@@ -63,11 +63,12 @@ class MainWindow(QMainWindow):
             "INT":"WORD",
             "STR":"STR"
             }.get(sel)
+        dir = self.ui.comboBox_directive.currentText()
         
         if type != "STR":
             val = int(val)
 
-        payload = {"type":"WRITE", type:{reg:val}}
+        payload = {"type":dir, type:{reg:val}}
 
         self.worker.write(json.dumps(payload))
 
