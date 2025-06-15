@@ -6,11 +6,14 @@ from PySide6.QtCore import (
 from PySide6.QtWidgets import (
     QMainWindow,
 )
+from PySide6 import QtGui
 
 from jsonrpc_client.worker import Worker
 from jsonrpc_client.ipc import TcpIpc
+from jsonrpc_client.wade import WadeModel
 
 from jsonrpc_client.dlg.main_window import Ui_MainWindow
+import jsonrpc_client.dlg.resources # noqa: F401
 
 __author__ = "Roger Huang"
 __copyright__ = "Copyright 2024, The JSONRPC Client Project"
@@ -36,6 +39,12 @@ class MainWindow(QMainWindow):
         self.threadpool = QThreadPool()
         thread_count = self.threadpool.maxThreadCount()
         print(f"Multithreading with maximum {thread_count} threads")
+
+        icons = [QtGui.QIcon(name) for name in \
+                 [':/icons/question.png', ':/icons/tick.png', ':/icons/cross.png']]
+        self.wade_model = WadeModel(icons=icons)
+        self.ui.listView_controlView.setModel(self.wade_model)
+        self.last_wade = None
 
         self.worker = TcpIpc(server_ip=server_ip, port=port)
         worker = Worker(
@@ -68,12 +77,37 @@ class MainWindow(QMainWindow):
         if type != "STR":
             val = int(val)
 
-        payload = {"type":dir, type:{reg:val}}
+        self.last_wade = {"type":dir, type:{reg:val}}
+        self.wade_model.wades.append((0, self.last_wade))
+        self.wade_model.layoutChanged.emit()
 
-        self.worker.write(json.dumps(payload))
+        self.worker.write(json.dumps(self.last_wade))
 
-    def progress_fn(self, msg:bytes):
-        self.ui.plainText_eventView.appendPlainText(msg.decode())
+    def progress_fn(self, msg:str):
+        if msg:
+            try:
+                msg_dict = json.loads(msg)
+            except Exception as e:
+                print(f'JSON: {msg} : {e}')
+                return
+
+            status = 0
+            result = None
+            if self.last_wade:
+                for x in ['result', 'error', 'wade']:
+                    status += 1
+                    result = msg_dict.get(x)
+                    if result:
+                        self.last_wade[x] = result
+                        break
+
+            if result:
+                if status == 3: # 'wade' is as 'error'
+                    status = 2
+                self.wade_model.wades[-1] = (status, self.last_wade)
+                self.wade_model.layoutChanged.emit()
+            else:
+                self.ui.plainText_eventView.appendPlainText(msg)
 
     def print_output(self, s):
         print(s)
