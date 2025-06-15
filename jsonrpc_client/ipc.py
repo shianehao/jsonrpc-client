@@ -31,9 +31,11 @@ class TcpIpc:
             return
 
         while self.stop is False:
-            payload = self.socket.recv(2048)
+            payload = self.socket.recv(4096)
+
             if payload:
-                event_callback(payload)
+                for x in payload.decode().split('\n'):
+                    event_callback(x)
             else:
                 break
 
