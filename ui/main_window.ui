@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>JSONRPC Client</string>
   </property>
-  <property name="windowIcon">
-   <iconset theme="QIcon::ThemeIcon::DocumentSend"/>
-  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
