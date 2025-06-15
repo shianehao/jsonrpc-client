@@ -4,5 +4,6 @@
 		<file alias="cross.png">icons/cross.png</file>
 		<file alias="tick.png">icons/tick.png</file>
 		<file alias="question.png">icons/question.png</file>
+		<file alias="app.ico">app.ico</file>
 	</qresource>
 </RCC>

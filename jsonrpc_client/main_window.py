@@ -32,6 +32,9 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        app_ico = QtGui.QIcon(':/icons/app.ico')
+        self.setWindowIcon(app_ico)
+
         self.ui.lineEdit_registerName.textChanged.connect(self.enable_fire)
         self.ui.lineEdit_value.textChanged.connect(self.enable_fire)
         self.ui.pushButton_fire.clicked.connect(self.wade)
