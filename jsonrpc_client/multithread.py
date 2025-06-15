@@ -52,7 +52,7 @@ class MainWindow(QMainWindow):
         val = self.ui.lineEdit_value.text()
         self.ui.pushButton_fire.setEnabled(
             True if reg and val else False)
-        
+
     def wade(self):
         reg = self.ui.lineEdit_registerName.text()
         val = self.ui.lineEdit_value.text()
@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
             "STR":"STR"
             }.get(sel)
         dir = self.ui.comboBox_directive.currentText()
-        
+
         if type != "STR":
             val = int(val)
 

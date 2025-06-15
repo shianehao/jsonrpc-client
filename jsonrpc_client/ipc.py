@@ -23,18 +23,27 @@ class TcpIpc:
 
     def run(self, event_callback:callable) -> str:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.connect((self.server_ip, self.port))
+        try:
+            self.socket.connect((self.server_ip, self.port))
+        except Exception as e:
+            print(f'TCP: {e}')
+            self.socket = None
+            return
 
         while self.stop is False:
             payload = self.socket.recv(2048)
-            event_callback(payload)
+            if payload:
+                event_callback(payload)
+            else:
+                break
 
         self.socket.close()
         self.socket = None
         return "Done."
-    
+
     def close(self) -> None:
-        self.socket.shutdown(0)
+        if self.socket:
+            self.socket.shutdown(0)
         self.stop = True
 
     def write(self, payload: str) -> None:
@@ -47,5 +56,3 @@ class TcpIpc:
                     raise RuntimeError("Socket connection broken")
                 totalsent += sent
 
-
-        
