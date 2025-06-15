@@ -13,6 +13,7 @@ __status__ = "Package"
 def gen_dialog():
     build_ui = [
             'pyside6-uic ui/main_window.ui -o jsonrpc_client/dlg/main_window.py',
+            'pyside6-rcc ui/resources.qrc -o jsonrpc_client/dlg/resources.py',
             ]
 
     try:
