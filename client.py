@@ -4,7 +4,7 @@ import logging
 
 from PySide6.QtWidgets import QApplication
 
-from jsonrpc_client.multithread import MainWindow
+from jsonrpc_client.main_window import MainWindow
 
 __author__ = "Roger Huang"
 __copyright__ = "Copyright 2024, The JSONRPC Client Project"
