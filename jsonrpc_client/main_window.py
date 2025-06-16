@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
             status = 0
             result = None
             if self.last_wade:
-                for x in ['result', 'error', 'wade']:
+                for x in ['result', 'error']:
                     status += 1
                     result = msg_dict.get(x)
                     if result:
@@ -105,8 +105,6 @@ class MainWindow(QMainWindow):
                         break
 
             if result:
-                if status == 3: # 'wade' is as 'error'
-                    status = 2
                 self.wade_model.wades[-1] = (status, self.last_wade)
                 self.wade_model.layoutChanged.emit()
             else:
@@ -117,6 +115,7 @@ class MainWindow(QMainWindow):
 
     def thread_complete(self):
         print("THREAD COMPLETE!")
+        self.close()
 
     def recurring_timer(self):
         self.counter += 1
