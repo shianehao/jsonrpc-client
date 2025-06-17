@@ -2,6 +2,7 @@ import json
 
 from PySide6.QtCore import (
     QThreadPool,
+    QTimer,
 )
 from PySide6.QtWidgets import (
     QMainWindow,
@@ -59,6 +60,8 @@ class MainWindow(QMainWindow):
         # Execute
         self.threadpool.start(worker)
 
+        self.timer = QTimer()
+
     def enable_fire(self):
         reg = self.ui.lineEdit_registerName.text()
         val = self.ui.lineEdit_value.text()
@@ -83,8 +86,9 @@ class MainWindow(QMainWindow):
         self.last_wade = {"type":dir, type:{reg:val}}
         self.wade_model.wades.append((0, self.last_wade))
         self.wade_model.layoutChanged.emit()
-
+        self.ui.pushButton_fire.setEnabled(False)
         self.worker.write(json.dumps(self.last_wade))
+        self.timer.singleShot(1000, self.enable_fire)
 
     def progress_fn(self, msg:str):
         if msg:
