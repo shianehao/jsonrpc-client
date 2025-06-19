@@ -19,6 +19,7 @@ https://github.com/user-attachments/assets/b9056e5e-a25b-4ab4-9df0-db2a35682987
 * 以pip 安裝程式，這一個venv環境只要做一次
   ```sh
   pip install -e .
+  python gen_dialog.py
   ```
 
 ### 測試
