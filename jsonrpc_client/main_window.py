@@ -88,9 +88,26 @@ class MainWindow(QMainWindow):
         self.wade_model.layoutChanged.emit()
         self.ui.pushButton_fire.setEnabled(False)
         self.worker.write(json.dumps(self.last_wade))
-        self.timer.singleShot(1000, self.enable_fire)
+        self.timer.singleShot(1000, self.clear_wade)
+
+    def clear_wade(self):
+        self.last_wade = None
+        self.enable_fire()
+
+    def wade_result(self, status: int, key: str, msg):
+        if self.last_wade:
+            self.last_wade[key] = msg
+            self.wade_model.wades[-1] = (status, self.last_wade)
+            self.wade_model.layoutChanged.emit()
+        else:
+            self.ui.plainText_eventView.appendPlainText(f'key : msg')
 
     def progress_fn(self, msg:str):
+        handles = {
+            'status': self.ui.statusbar.showMessage,
+            'error': lambda x : self.wade_result(2, 'error', x),
+            'result': lambda x : self.wade_result(1, 'result', x)
+        }
         if msg:
             try:
                 msg_dict = json.loads(msg)
@@ -98,22 +115,14 @@ class MainWindow(QMainWindow):
                 print(f'JSON: {msg} : {e}')
                 return
 
-            status = 0
-            result = None
-            if self.last_wade:
-                for x in ['result', 'error']:
-                    status += 1
-                    result = msg_dict.get(x)
-                    if result:
-                        self.last_wade[x] = result
-                        break
-
-            if result:
-                self.wade_model.wades[-1] = (status, self.last_wade)
-                self.wade_model.layoutChanged.emit()
+            for key, handler in handles.items():
+                result = msg_dict.get(key)
+                if result:
+                    handler(result)
+                    break
             else:
                 self.ui.plainText_eventView.appendPlainText(msg)
-
+ 
     def print_output(self, s):
         print(s)
 
