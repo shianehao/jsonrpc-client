@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
             self.wade_model.wades[-1] = (status, self.last_wade)
             self.wade_model.layoutChanged.emit()
         else:
-            self.ui.plainText_eventView.appendPlainText(f'key : msg')
+            self.ui.plainText_eventView.appendPlainText(f'{key} : {msg}')
 
     def progress_fn(self, msg:str):
         handles = {
@@ -114,6 +114,9 @@ class MainWindow(QMainWindow):
             except Exception as e:
                 print(f'JSON: {msg} : {e}')
                 return
+            if isinstance(msg_dict, dict) is False:
+                print(f'MSG: {msg}')
+                return
 
             for key, handler in handles.items():
                 result = msg_dict.get(key)
@@ -122,7 +125,7 @@ class MainWindow(QMainWindow):
                     break
             else:
                 self.ui.plainText_eventView.appendPlainText(msg)
- 
+
     def print_output(self, s):
         print(s)
 
