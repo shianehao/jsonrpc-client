@@ -27,3 +27,9 @@ https://github.com/user-attachments/assets/b9056e5e-a25b-4ab4-9df0-db2a35682987
 ```sh
 python client.py 127.0.0.1 51820
 ```
+
+### 主畫面編輯
+畫面設計檔其副檔名為ui
+```sh
+pyside6-designer ui/main_window.ui
+```
