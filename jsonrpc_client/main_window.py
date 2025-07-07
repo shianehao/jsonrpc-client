@@ -88,23 +88,52 @@ class MainWindow(QMainWindow):
         self.wade_model.layoutChanged.emit()
         self.ui.pushButton_fire.setEnabled(False)
         self.worker.write(json.dumps(self.last_wade))
-        self.timer.singleShot(1000, self.clear_wade)
+        self.timer.singleShot(2000, self.clear_wade)
 
     def clear_wade(self):
         self.last_wade = None
-        self.enable_fire()
 
-    def wade_result(self, status: int, key: str, msg):
+    def wade_result(self, status: int, key: str, msg: str):
+        if status == 2:
+            # enable fire button on error case.
+            self.enable_fire()
         if self.last_wade:
-            self.last_wade[key] = msg
-            self.wade_model.wades[-1] = (status, self.last_wade)
+            if self.last_wade.get(key):
+                _, prev = self.wade_model.wades[-2]
+                prev[key] = msg
+                self.wade_model.wades[-2] = (status, prev)
+            else:
+                self.last_wade[key] = msg
+                self.wade_model.wades[-1] = (status, self.last_wade)
             self.wade_model.layoutChanged.emit()
         else:
             self.ui.plainText_eventView.appendPlainText(f'{key} : {msg}')
 
-    def progress_fn(self, msg:str):
+    def wade_handler(self, msg: str):
+        self.enable_fire()
+        if msg in ['done']:
+            self.wade_result(1, 'wade', msg)
+        else:
+            self.wade_result(2, 'wade', msg)
+
+    def status_handler(self, msg: str | dict):
+        if isinstance(msg, str):
+            self.ui.statusbar.showMessage(msg)
+            return
+        if isinstance(msg, dict):
+            handlers = {
+                'wade': self.wade_handler,
+            }
+            for k, v in msg.items():
+                handler = handlers.get(k)
+                if handler:
+                    handler(v)
+                else:
+                    self.ui.plainText_eventView.appendPlainText(f'{k} : {v}')
+
+    def progress_fn(self, msg: str):
         handles = {
-            'status': self.ui.statusbar.showMessage,
+            'status': self.status_handler,
             'error': lambda x : self.wade_result(2, 'error', x),
             'result': lambda x : self.wade_result(1, 'result', x)
         }
