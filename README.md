@@ -1,8 +1,8 @@
 JSONRPC Client
 ==============
 
-jsonrpc client is the `JSONRPC <https://www.jsonrpc.org/>` client for HMI/PLC master-slave architecture JSONRPC server.
-This code is used python3.12 and `pyside2 <https://doc.qt.io/qtforpython-6/index.html>` as GUI.
+jsonrpc client is the [JSONRPC](https://www.jsonrpc.org/) client for HMI/PLC master-slave architecture JSONRPC server.
+This code is used python3.12 and [pyside6](https://doc.qt.io/qtforpython-6/index.html) as GUI.
 
 
 https://github.com/user-attachments/assets/b9056e5e-a25b-4ab4-9df0-db2a35682987
