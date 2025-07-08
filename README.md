@@ -50,6 +50,13 @@ venv\Scripts\activate
 pip install -e .
 pip install pyinstaller
 ```
+
+#### 更新UI
+在source code 工作目錄下執行以下指命且已進入venv模式
+```sh
+python gen_dialog.py
+```
+
 #### 打包指命
 
 在source code 工作目錄下執行以下指命且已進入venv模式
