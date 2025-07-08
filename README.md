@@ -38,3 +38,25 @@ python client.py 127.0.0.1 51820
 ```sh
 pyside6-designer ui/main_window.ui
 ```
+
+### 打包成執行檔 - WINDOWS和Linux皆可支援, 以下以WINDOWS 終端機演示
+
+#### 環境架設及安裝 - venv 和  pyinstaller
+
+在source code 工作目錄下執行以下指命
+```sh
+python -m venv venv
+venv\Scripts\activate
+pip install -e .
+pip install pyinstaller
+```
+#### 打包指命
+
+在source code 工作目錄下執行以下指命且已進入venv模式
+```sh
+pyinstaller -F client.py
+```
+執行完後在dist有打包後執行檔
+
+
+
