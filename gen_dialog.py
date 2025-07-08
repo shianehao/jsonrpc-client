@@ -2,7 +2,7 @@ import os
 import subprocess
 
 __author__ = "Roger Huang"
-__copyright__ = "Copyright 2024, The JSONRPC Client Project"
+__copyright__ = "Copyright 2025, The JSONRPC Client Project"
 __license__ = "Proprietary"
 __version__ = "2.0.1"
 __maintainer__ = "Roger Huang"

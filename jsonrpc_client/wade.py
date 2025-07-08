@@ -3,6 +3,15 @@ import json
 from PySide6 import QtCore
 from PySide6.QtCore import Qt
 
+__author__ = "Roger Huang"
+__copyright__ = "Copyright 2025, The JSONRPC Client Project"
+__license__ = "Proprietary"
+__version__ = "2.0.1"
+__maintainer__ = "Roger Huang"
+__email__ = "rogerhuang7@gmail.com"
+__status__ = "Package"
+
+
 class WadeModel(QtCore.QAbstractListModel):
     def __init__(self, wades=None, icons=None):
         super().__init__()
