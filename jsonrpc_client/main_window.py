@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
         worker = Worker(
             self.worker.run
         )  # Any other args, kwargs are passed to the run function
-        worker.signals.result.connect(self.print)
+        worker.signals.result.connect(print)
         worker.signals.finished.connect(self.thread_complete)
         worker.signals.progress.connect(self.progress_fn)
         # Execute
