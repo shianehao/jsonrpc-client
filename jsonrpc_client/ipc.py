@@ -31,7 +31,11 @@ class TcpIpc:
             return
 
         while self.stop is False:
-            payload = self.socket.recv(4096)
+            try:
+                payload = self.socket.recv(4096)
+            except ConnectionAbortedError as e:
+                logger.error(f"Connection aborted: {e}")
+                break
 
             if payload:
                 for x in payload.decode().split('\n'):
@@ -39,13 +43,13 @@ class TcpIpc:
             else:
                 break
 
-        self.socket.close()
         self.socket = None
         return "Done."
 
     def close(self) -> None:
         if self.socket:
             self.socket.shutdown(0)
+        self.socket.close()
         self.stop = True
 
     def write(self, payload: str) -> None:
