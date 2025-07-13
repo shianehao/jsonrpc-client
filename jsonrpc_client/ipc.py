@@ -48,10 +48,7 @@ class TcpIpc:
 
     def close(self) -> None:
         if self.socket:
-            if os.name == 'posix':
-                self.socket.close()
-            else:
-                self.socket.shutdown(socket.SHUT_RDWR)
+            self.socket.shutdown(socket.SHUT_RDWR)
         self.stop = True
 
     def write(self, payload: str) -> None:
