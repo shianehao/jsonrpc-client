@@ -29,6 +29,11 @@
           <string>READ</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>QUERY</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -85,7 +90,7 @@
       <item>
        <widget class="QPushButton" name="pushButton_fire">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text">
          <string>Fire</string>

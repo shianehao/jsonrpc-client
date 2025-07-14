@@ -6,6 +6,7 @@ from PySide6.QtCore import (
 )
 from PySide6.QtWidgets import (
     QMainWindow,
+    QMessageBox,
 )
 from PySide6 import QtGui
 
@@ -61,21 +62,29 @@ class MainWindow(QMainWindow):
         self.timer = QTimer()
 
     def enable_fire(self):
-        reg = self.ui.lineEdit_registerName.text()
-        val = self.ui.lineEdit_value.text()
-        self.ui.pushButton_fire.setEnabled(
-            True if len(reg) and len(val) else False)
+        self.ui.pushButton_fire.setEnabled(True)
 
     def wade(self):
         dir = self.ui.comboBox_directive.currentText()
         reg = self.ui.lineEdit_registerName.text()
         reg_type = self.ui.comboBox_type.currentText()
         val = self.ui.lineEdit_value.text()
+
+        if not reg:
+            QMessageBox.warning(self, "Input Error",
+                                "Register name cannot be empty.")
+            return
+        if dir != 'QUERY' and not val:
+            QMessageBox.warning(self, "Input Error",
+                                "Value cannot be empty.")
+            return
+
         self.ui.pushButton_fire.setEnabled(False)
 
         wade_obj = self.wade_model.wade(dir=dir, reg_type=reg_type, val=val, reg=reg)
-        self.worker.write(json.dumps(wade_obj))
-        self.timer.singleShot(1000, self.enable_fire)
+        if wade_obj:
+            self.worker.write(json.dumps(wade_obj))
+            self.timer.singleShot(1000, self.enable_fire)
 
     def wade_result(self, status: int, key: str, msg: str):
         if self.wade_model.handle_result(status, key, msg) is False:

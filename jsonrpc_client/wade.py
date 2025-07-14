@@ -26,10 +26,14 @@ class WadeModel(QtCore.QAbstractListModel):
             "INT":"WORD",
             "STR":"STR"
             }.get(reg_type)
-        if tran_type != "STR":
-            val = int(val)
+        
+        if dir == "QUERY":
+            self.last_wade = {"type":dir, tran_type:reg}
+        else:
+            if tran_type != "STR":
+                val = int(val)
+            self.last_wade = {"type":dir, tran_type:{reg:val}}
 
-        self.last_wade = {"type":dir, tran_type:{reg:val}}
         self.wades.append((0, self.last_wade))
         self.layoutChanged.emit()
 
