@@ -67,46 +67,22 @@ class MainWindow(QMainWindow):
             True if len(reg) and len(val) else False)
 
     def wade(self):
-        reg = self.ui.lineEdit_registerName.text()
-        val = self.ui.lineEdit_value.text()
-        sel = self.ui.comboBox_type.currentText()
-        type = {
-            "BIT":"BIT",
-            "UINT":"WORD",
-            "INT":"WORD",
-            "STR":"STR"
-            }.get(sel)
         dir = self.ui.comboBox_directive.currentText()
-        if type != "STR":
-            val = int(val)
-
-        self.last_wade = {"type":dir, type:{reg:val}}
-        self.wade_model.wades.append((0, self.last_wade))
-        self.wade_model.layoutChanged.emit()
+        reg = self.ui.lineEdit_registerName.text()
+        reg_type = self.ui.comboBox_type.currentText()
+        val = self.ui.lineEdit_value.text()
         self.ui.pushButton_fire.setEnabled(False)
-        self.worker.write(json.dumps(self.last_wade))
-        self.timer.singleShot(1000, self.clear_wade)
 
-    def clear_wade(self):
-        self.last_wade = None
-        self.enable_fire()
+        wade_obj = self.wade_model.wade(dir=dir, reg_type=reg_type, val=val, reg=reg)
+        self.worker.write(json.dumps(wade_obj))
+        self.timer.singleShot(1000, self.enable_fire)
 
     def wade_result(self, status: int, key: str, msg: str):
+        if self.wade_model.handle_result(status, key, msg) is False:
+            self.ui.plainText_eventView.appendPlainText(f'{key} : {msg}')
         if status == 2:
             # enable fire button on error case.
             self.enable_fire()
-        if self.last_wade:
-            if self.last_wade.get(key):
-                # incase of timeout of wading
-                _, prev = self.wade_model.wades[-2]
-                prev[key] = msg
-                self.wade_model.wades[-2] = (status, prev)
-            else:
-                self.last_wade[key] = msg
-                self.wade_model.wades[-1] = (status, self.last_wade)
-            self.wade_model.layoutChanged.emit()
-        else:
-            self.ui.plainText_eventView.appendPlainText(f'{key} : {msg}')
 
     def wade_handler(self, msg: str):
         self.enable_fire()
@@ -116,10 +92,6 @@ class MainWindow(QMainWindow):
             self.wade_result(2, 'wade', msg)
 
     def status_handler(self, msg: str | dict):
-        if isinstance(msg, str):
-            self.ui.statusbar.showMessage(msg)
-            return
-
         if isinstance(msg, dict):
             handlers = {
                 'wade': self.wade_handler,
@@ -131,6 +103,8 @@ class MainWindow(QMainWindow):
                     break
             else:
                 self.ui.plainText_eventView.appendPlainText(f'{k} : {v}')
+        else:
+            self.ui.statusbar.showMessage(msg)
 
     def progress_fn(self, msg: str):
         handles = {

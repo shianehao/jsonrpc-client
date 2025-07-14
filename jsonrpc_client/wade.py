@@ -17,7 +17,39 @@ class WadeModel(QtCore.QAbstractListModel):
         super().__init__()
         self.wades = wades or []
         self.icons = icons or []
+        self.last_wade = None
 
+    def wade(self, dir: str, reg_type: str, reg: str, val: str) -> dict:
+        tran_type = {
+            "BIT":"BIT",
+            "UINT":"WORD",
+            "INT":"WORD",
+            "STR":"STR"
+            }.get(reg_type)
+        if tran_type != "STR":
+            val = int(val)
+
+        self.last_wade = {"type":dir, tran_type:{reg:val}}
+        self.wades.append((0, self.last_wade))
+        self.layoutChanged.emit()
+
+        return self.last_wade
+
+    def handle_result(self, status: int, key: str, msg: str) -> bool:
+        if self.last_wade:
+            if self.last_wade.get(key):
+                # incase of timeout of wading
+                _, prev = self.wades[-2]
+                prev[key] = msg
+                self.wades[-2] = (status, prev)
+            else:
+                self.last_wade[key] = msg
+                self.wades[-1] = (status, self.last_wade)
+            self.layoutChanged.emit()
+
+            return True
+        else:
+            return False
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
