@@ -9,7 +9,14 @@ where = ["jsonrpc_client"]
 name = "jsonrpc-client"
 version = "0.0.1"
 dependencies = [
+	"setuptools",
 	"PySide6",
 	"PySide6_Addons",
 	"PySide6_Essentials",
 ]
+readme = "README.md"
+authors = [
+	{name = "Roger Huang", email = "roger.huang@ezcode.com.tw"}
+]
+description = "Demonstrate the JSON-RPC client for PLC+"
+license = "MIT"
