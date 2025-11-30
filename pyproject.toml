@@ -13,6 +13,7 @@ dependencies = [
 	"PySide6",
 	"PySide6_Addons",
 	"PySide6_Essentials",
+	"paho-mqtt",
 ]
 readme = "README.md"
 authors = [
